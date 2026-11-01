@@ -102,3 +102,48 @@ begin
     end if;
 end;
 $$;
+
+
+-- trigger: confere o gol antes de salvar.
+-- se o clube do gol não foi informado, usa o clube do jogador.
+-- o gol tem que ser do mandante ou do visitante da partida.
+-- jogador expulso não pode marcar gol depois de ser expulso.
+create or replace function fn_trg_gol_valida()
+returns trigger
+language plpgsql
+set search_path = nelson_brasileirao_db, public
+as $$
+declare
+    v_mandante  integer;
+    v_visitante integer;
+begin
+    select mandante_id, visitante_id
+      into v_mandante, v_visitante
+      from partida
+     where id_partida = new.partida_id;
+
+    if new.clube_id is null then
+        select clube_id into new.clube_id from jogador where id_jogador = new.jogador_id;
+    end if;
+
+    if new.clube_id is null or new.clube_id not in (v_mandante, v_visitante) then
+        raise exception 'O gol precisa ser creditado ao mandante ou ao visitante da partida.';
+    end if;
+
+    if exists (select 1 from cartao
+                where partida_id = new.partida_id
+                  and jogador_id = new.jogador_id
+                  and tipo = 'vermelho'
+                  and minuto < new.minuto) then
+        raise exception 'O jogador foi expulso antes do minuto % e não pode ter marcado esse gol.', new.minuto;
+    end if;
+
+    return new;
+end;
+$$;
+
+drop trigger if exists trg_gol_valida on gol;
+create trigger trg_gol_valida
+    before insert or update on gol
+    for each row
+    execute function fn_trg_gol_valida();
