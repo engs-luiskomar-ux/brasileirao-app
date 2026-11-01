@@ -49,4 +49,18 @@ class PartidaService
                 'gols_visitante' => $placar->gols_visitante,
             ]);
         }
+
+        public function criar(array $dados): Partida {
+            return BancoDeDados::executar(function () use ($dados) {
+                $resultado = DB::selectOne('CALL sp_registrar_partida(?, ?, ?, ?, ?, NULL', [
+                        $dados['temporara_id'],
+                        $dados['rodada'],
+                        Carbon::parse($dados['data_partida']->format('Y-m-d H:i:s')),
+                        $dados['mandante_id'],
+                        $dados['visitante_id'],
+                ]);
+
+                return $this->detalhar(Partida::findOrFail($resultado->p_id_partida));
+            });
+        }
 }
