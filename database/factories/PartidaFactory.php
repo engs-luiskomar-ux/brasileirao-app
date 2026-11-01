@@ -7,7 +7,7 @@ use App\Models\Temporada;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * [João Vitor] Gera partidas falsas para os testes.
+ * Gera partidas falsas para os testes.
  * A data é sempre dentro do ano da temporada (senão a trigger
  * trg_partida_valida recusa o INSERT).
  *
