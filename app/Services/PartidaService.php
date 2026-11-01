@@ -63,4 +63,13 @@ class PartidaService
                 return $this->detalhar(Partida::findOrFail($resultado->p_id_partida));
             });
         }
+
+        public function atualizar(Partida $partida, array $dados): Partida {
+
+            return BancoDeDados::executar(function () use ($partida, $dados) {
+                    $partida->update($dados);
+
+                    return $this->detalhar($partida->refresh());
+            });
+        }
 }
