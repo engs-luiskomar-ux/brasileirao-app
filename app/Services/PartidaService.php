@@ -8,6 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use League\Uri\UrlPattern\Part;
 
 class PartidaService
 {
@@ -53,7 +54,7 @@ class PartidaService
         public function criar(array $dados): Partida {
             return BancoDeDados::executar(function () use ($dados) {
                 $resultado = DB::selectOne('CALL sp_registrar_partida(?, ?, ?, ?, ?, NULL', [
-                        $dados['temporara_id'],
+                        $dados['temporada_id'],
                         $dados['rodada'],
                         Carbon::parse($dados['data_partida']->format('Y-m-d H:i:s')),
                         $dados['mandante_id'],
@@ -71,5 +72,9 @@ class PartidaService
 
                     return $this->detalhar($partida->refresh());
             });
+        }
+
+        public function excluir(Partida $partida): void {
+            BancoDeDados::executar(fn () => $partida->delete());
         }
 }
