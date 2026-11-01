@@ -32,4 +32,8 @@ class PartidaService
             ->withQueryString();
     }
 
+        // Função para retornar os gols do mandante e visitante
+        public function placar(Partida $partida): object{
+            return DB::selectOne('SELECT * FROM fn_placar_partida(?)', [$partida->id_partida]);
+        }
 }
