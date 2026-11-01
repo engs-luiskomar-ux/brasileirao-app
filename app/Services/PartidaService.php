@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Services;
-
 use App\Models\Partida;
+use App\Models\Temporada;
+use App\Support\BancoDeDados;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PartidaService
