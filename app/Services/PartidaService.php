@@ -39,4 +39,14 @@ class PartidaService
         public function placar(Partida $partida): object{
             return DB::selectOne('SELECT * FROM fn_placar_partida(?)', [$partida->id_partida]);
         }
+
+        public function detalhar(Partida $partida): Partida
+        {
+            $placar = $this->placar($partida);
+
+            return $partida->load(self::RELACOES)->forceFill([
+                'gols_mandante' => $placar->gols_mandante,
+                'gols_visitante' => $placar->gols_visitante,
+            ]);
+        }
 }
