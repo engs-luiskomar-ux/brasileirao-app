@@ -77,4 +77,9 @@ class PartidaService
         public function excluir(Partida $partida): void {
             BancoDeDados::executar(fn () => $partida->delete());
         }
+
+          public function temporadas(): Collection
+    {
+        return Temporada::query()->orderByDesc('ano')->get(['id_temporada', 'ano', 'nome']);
+    }
 }
