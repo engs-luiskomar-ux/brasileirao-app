@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Partida;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+
+class PartidaService
+{
+    private const RELACOES = ['temporada', 'mandante', 'visitante'];
+   
+    public function listar(array $filtros = [], int $porPagina = 20): LengthAwarePaginator
+    {
+        $temporadaId = $filtros['temporada_id'] ?? null;
+
+        return Partida::query()
+            ->select('partida.*', 'placar.gols_mandante', 'placar_gols_visitante')
+            ->crossJoin(DB::raw('LATERAL fn_placar_partida(partida.id_partida) as placar'))
+            ->with(self::RELACOES)
+            ->when($temporadaId, fn ($q) => $q->where('partida.temporada_id', $temporadaId))
+            ->when($filtros['rodada'] ?? null, fn ($q, $rodada) => $q->where('partida.rodada', $rodada))
+            ->when($filtros['clube_id'] ?? null, fn ($q, $clubeId) => $q->where(
+                fn ($w) => $w->where('partida.mandante_id', $clubeId)-orWhere('partida.visitante_id', $clubeId)
+            ))
+            -> when(
+                $temporadaId,
+                 fn ($q) => $q->orderBy('partida.rodada')->orderBy('partida.data_partida'),
+                fn ($q) => $q->orderByDesc('partida.data_partida'),
+            )
+            ->paginate($porPagina)
+            ->withQueryString();
+    }
+
+}
