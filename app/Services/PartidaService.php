@@ -82,4 +82,9 @@ class PartidaService
     {
         return Temporada::query()->orderByDesc('ano')->get(['id_temporada', 'ano', 'nome']);
     }
+
+     public function temporadaPadrao(): ?int
+    {
+        return Temporada::query()->has('partidas')->orderByDesc('ano')->value('id_temporada');
+    }
 }
