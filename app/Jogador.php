@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Jogador extends Model
 {
@@ -23,5 +25,19 @@ class Jogador extends Model
             'numero_camisa' => 'integer',
             'clube_id' => 'integer',
         ];
+    }
+    public function clube(): BelongsTo
+    {
+        return $this->belongsTo(Clube::class, 'clube_id', 'id_clube');
+    }
+
+    public function transferencias(): HasMany
+    {
+        return $this->hasMany(HistoricoTransferencia::class, 'jogador_id', 'id_jogador');
+    }
+
+    public function gols(): HasMany
+    {
+        return $this->hasMany(Gol::class, 'jogador_id', 'id_jogador');
     }
 }
