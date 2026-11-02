@@ -4,24 +4,19 @@ namespace App\Http\Requests;
 
 use App\Jogador;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Validation\Rule;
 
-
+/**
+ * [Nelson] Validação de jogador (tela e API).
+ * Em PATCH (API) os campos viram "sometimes".
+ */
 class JogadorRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         $obrigatorio = $this->isMethod('patch') ? 'sometimes' : 'required';
@@ -33,5 +28,20 @@ class JogadorRequest extends FormRequest
             'numero_camisa' => ['nullable', 'integer', 'between:1,99'],
             'clube_id' => [$obrigatorio, 'integer', 'exists:clube,id_clube'],
         ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'posicao' => 'posição',
+            'data_nascimento' => 'data de nascimento',
+            'numero_camisa' => 'número da camisa',
+            'clube_id' => 'clube',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return ['data_nascimento.before' => 'O jogador precisa ter pelo menos 15 anos.'];
     }
 }
