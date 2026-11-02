@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jogador;
+use App\Http\Requests\JogadorRequest;
 use Illuminate\Http\Request;
 use App\Services\JogadorService;
 use Illuminate\Http\JsonResponse;
@@ -24,9 +25,11 @@ class JogadorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(JogadorRequest $request): JsonResponse
     {
-        //
+        $jogador = $this->jogadores->criar($request->validated());
+
+        return (new JogadorResource($jogador))->response()->setStatusCode(201);
     }
 
     /**
