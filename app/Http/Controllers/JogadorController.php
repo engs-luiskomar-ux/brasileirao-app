@@ -56,9 +56,14 @@ class JogadorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Jogador $jogador)
+    public function show(Jogador $jogador): View
     {
-        //
+        return view('jogadores.show', [
+            'jogador' => $jogador->load('clube'),
+            'estatisticas' => $this->jogadores->estatisticas($jogador),
+            'historico' => $this->jogadores->historico($jogador),
+            'clubes' => $this->clubes->opcoes(),
+        ]);
     }
 
     /**
