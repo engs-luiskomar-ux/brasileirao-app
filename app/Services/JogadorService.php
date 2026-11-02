@@ -31,4 +31,8 @@ class JogadorService
             return $jogador->refresh()->load('clube');
         });
     }
+    public function excluir(Jogador $jogador): void
+    {
+        BancoDeDados::executar(fn () => $jogador->delete());
+    }
 }
