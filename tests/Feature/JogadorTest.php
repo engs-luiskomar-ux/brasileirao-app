@@ -24,5 +24,28 @@ class JogadorTest extends TestCase
             ->assertSee("fn_estatisticas_jogador({$jogador->id_jogador})")
             ->assertViewHas('estatisticas', fn ($e) => $e->gols === 1);
     }
+    public function test_transferencia_pela_tela_chama_procedure_e_trigger_grava_historico(): void
+    {
+        $jogador = Jogador::factory()->create(['numero_camisa' => 10]);
+        $destino = Clube::factory()->create();
+        $origemId = $jogador->clube_id;
+
+        $this->post("/jogadores/{$jogador->id_jogador}/transferir", ['clube_destino_id' => $destino->id_clube])
+            ->assertRedirect("/jogadores/{$jogador->id_jogador}")
+            ->assertSessionHas('sucesso');
+
+        $this->assertDatabaseHas('jogador', [
+            'id_jogador' => $jogador->id_jogador,
+            'clube_id' => $destino->id_clube,
+            'numero_camisa' => 10, // camisa livre no destino: mantida
+        ]);
+
+        // Linha gravada pela trigger trg_jogador_transferencia
+        $this->assertDatabaseHas('historico_transferencia', [
+            'jogador_id' => $jogador->id_jogador,
+            'clube_origem_id' => $origemId,
+            'clube_destino_id' => $destino->id_clube,
+        ]);
+    }
 
 }
