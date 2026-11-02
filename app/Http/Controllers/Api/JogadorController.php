@@ -35,17 +35,15 @@ class JogadorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Jogador $jogador)
+    public function show(Jogador $jogador): JogadorResource
     {
-        //
+        return (new JogadorResource($jogador->load('clube')))
+            ->additional(['estatisticas' => $this->jogadores->estatisticas($jogador)]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Jogador $jogador)
+    public function update(JogadorRequest $request, Jogador $jogador): JogadorResource
     {
-        //
+        return new JogadorResource($this->jogadores->atualizar($jogador, $request->validated()));
     }
 
     /**
