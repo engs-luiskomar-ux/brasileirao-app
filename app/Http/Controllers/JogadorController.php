@@ -30,9 +30,13 @@ class JogadorController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('jogadores.create', [
+            'jogador' => new Jogador,
+            'clubes' => $this->clubes->opcoes(),
+            'posicoes' => Jogador::POSICOES,
+        ]);
     }
 
     /**
