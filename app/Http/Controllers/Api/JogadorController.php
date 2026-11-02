@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jogador;
+use App\Http\Requests\TransferenciaRequest;
 use App\Http\Requests\JogadorRequest;
 use Illuminate\Http\Request;
 use App\Services\JogadorService;
@@ -55,5 +56,20 @@ class JogadorController extends Controller
         $this->jogadores->excluir($jogador);
 
         return response()->noContent();
+    }
+    public function transferir(TransferenciaRequest $request, Jogador $jogador): JogadorResource
+    {
+        $jogador = $this->jogadores->transferir(
+            $jogador,
+            $request->integer('clube_destino_id'),
+            $request->filled('numero_camisa') ? $request->integer('numero_camisa') : null,
+        );
+
+        return (new JogadorResource($jogador))
+            ->additional(['historico' => $this->jogadores->historico($jogador)->map(fn ($h) => [
+                'de' => $h->origem->nome,
+                'para' => $h->destino->nome,
+                'data' => $h->data_transferencia->toIso8601String(),
+            ])]);
     }
 }
