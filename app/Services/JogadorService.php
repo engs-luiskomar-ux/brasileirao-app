@@ -23,8 +23,12 @@ class JogadorService
     {
         return BancoDeDados::executar(fn () => Jogador::create($dados)->load('clube'));
     }
-    public function __construct()
+    public function atualizar(Jogador $jogador, array $dados): Jogador
     {
-        //
+        return BancoDeDados::executar(function () use ($jogador, $dados) {
+            $jogador->update($dados);
+
+            return $jogador->refresh()->load('clube');
+        });
     }
 }
