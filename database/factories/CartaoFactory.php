@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Jogador;
+use App\Jogador;
 use App\Models\Partida;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

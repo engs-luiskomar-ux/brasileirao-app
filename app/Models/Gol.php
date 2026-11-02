@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Jogador;
 
 // Thiago - model da tabela gol.
 // clube_id = clube que recebeu o gol. Se vier vazio, a trigger preenche com o clube do jogador.

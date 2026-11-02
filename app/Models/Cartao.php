@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Jogador;
 
 // Thiago - model da tabela cartao.
 // o cadastro pela aplicação passa pela procedure sp_registrar_cartao.

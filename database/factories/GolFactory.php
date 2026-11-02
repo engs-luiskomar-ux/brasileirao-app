@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Jogador;
+use App\Jogador;
 use App\Models\Partida;
 use Illuminate\Database\Eloquent\Factories\Factory;
+
 
 // Thiago - gera um gol falso para os testes.
 // o jogador é do mandante da partida e o clube_id fica nulo para a trigger preencher.
