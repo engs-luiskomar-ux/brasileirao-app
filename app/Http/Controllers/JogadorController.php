@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services;
 use App\Jogador;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 
 class JogadorController extends Controller
@@ -17,7 +18,7 @@ class JogadorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         return view('jogadores.index', [
             'jogadores' => $this->jogadores->listar($request->only('busca', 'clube_id', 'posicao')),
