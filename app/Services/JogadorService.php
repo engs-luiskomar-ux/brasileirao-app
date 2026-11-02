@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Jogador;
 use App\Support\BancoDeDados;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class JogadorService
 {
@@ -34,5 +35,9 @@ class JogadorService
     public function excluir(Jogador $jogador): void
     {
         BancoDeDados::executar(fn () => $jogador->delete());
+    }
+    public function estatisticas(Jogador $jogador): object
+    {
+        return DB::selectOne('SELECT * FROM fn_estatisticas_jogador(?)', [$jogador->id_jogador]);
     }
 }
