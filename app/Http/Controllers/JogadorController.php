@@ -91,8 +91,10 @@ class JogadorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Jogador $jogador)
+    public function destroy(Jogador $jogador): RedirectResponse
     {
-        //
+        $this->jogadores->excluir($jogador);
+
+        return redirect()->route('jogadores.index')->with('sucesso', 'Jogador excluído.');
     }
 }
