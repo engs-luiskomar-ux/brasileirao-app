@@ -52,4 +52,12 @@ class JogadorService
             return $jogador->refresh()->load('clube');
         });
     }
+    public function historico(Jogador $jogador): Collection
+    {
+        return $jogador->transferencias()
+            ->with(['origem', 'destino'])
+            ->orderByDesc('data_transferencia')
+            ->orderByDesc('id_transferencia')
+            ->get();
+    }
 }
