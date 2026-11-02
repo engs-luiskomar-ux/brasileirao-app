@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Jogador;
+use App\Support\BancoDeDados;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class JogadorService
@@ -17,6 +18,10 @@ class JogadorService
             ->orderBy('nome')
             ->paginate($porPagina)
             ->withQueryString();
+    }
+    public function criar(array $dados): Jogador
+    {
+        return BancoDeDados::executar(fn () => Jogador::create($dados)->load('clube'));
     }
     public function __construct()
     {
