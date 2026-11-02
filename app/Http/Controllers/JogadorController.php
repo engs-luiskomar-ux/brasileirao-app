@@ -69,17 +69,23 @@ class JogadorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Jogador $jogador)
+    public function edit(Jogador $jogador): View
     {
-        //
+        return view('jogadores.edit', [
+            'jogador' => $jogador,
+            'clubes' => $this->clubes->opcoes(),
+            'posicoes' => Jogador::POSICOES,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Jogador $jogador)
+    public function update(JogadorRequest $request, Jogador $jogador): RedirectResponse
     {
-        //
+        $this->jogadores->atualizar($jogador, $request->validated());
+
+        return redirect()->route('jogadores.show', $jogador)->with('sucesso', 'Jogador atualizado.');
     }
 
     /**
