@@ -6,10 +6,6 @@ use App\Jogador;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-/**
- * [Nelson] Validação de jogador (tela e API).
- * Em PATCH (API) os campos viram "sometimes".
- */
 class JogadorRequest extends FormRequest
 {
     public function authorize(): bool
