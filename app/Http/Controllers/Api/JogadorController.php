@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Services\JogadorService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\JogadorResource;
+use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class JogadorController extends Controller
@@ -49,8 +50,10 @@ class JogadorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Jogador $jogador)
+    public function destroy(Jogador $jogador): Response
     {
-        //
+        $this->jogadores->excluir($jogador);
+
+        return response()->noContent();
     }
 }
