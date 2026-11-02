@@ -37,15 +37,29 @@ class JogadorTest extends TestCase
         $this->assertDatabaseHas('jogador', [
             'id_jogador' => $jogador->id_jogador,
             'clube_id' => $destino->id_clube,
-            'numero_camisa' => 10, // camisa livre no destino: mantida
+            'numero_camisa' => 10, 
         ]);
 
-        // Linha gravada pela trigger trg_jogador_transferencia
         $this->assertDatabaseHas('historico_transferencia', [
             'jogador_id' => $jogador->id_jogador,
             'clube_origem_id' => $origemId,
             'clube_destino_id' => $destino->id_clube,
         ]);
+    }
+    public function test_api_cria_jogador_e_retorna_201(): void
+    {
+        $clube = Clube::factory()->create();
+
+        $this->postJson('/api/jogadores', [
+            'nome' => 'Jogador da API',
+            'posicao' => 'Atacante',
+            'data_nascimento' => '2000-01-15',
+            'numero_camisa' => 9,
+            'clube_id' => $clube->id_clube,
+        ])
+            ->assertCreated()
+            ->assertJsonPath('data.nome', 'Jogador da API')
+            ->assertJsonPath('data.clube.id', $clube->id_clube);
     }
 
 }
