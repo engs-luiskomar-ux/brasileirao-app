@@ -97,4 +97,15 @@ class JogadorController extends Controller
 
         return redirect()->route('jogadores.index')->with('sucesso', 'Jogador excluído.');
     }
+    public function transferir(TransferenciaRequest $request, Jogador $jogador): RedirectResponse
+    {
+        $jogador = $this->jogadores->transferir(
+            $jogador,
+            $request->integer('clube_destino_id'),
+            $request->filled('numero_camisa') ? $request->integer('numero_camisa') : null,
+        );
+
+        return redirect()->route('jogadores.show', $jogador)
+            ->with('sucesso', "{$jogador->nome} transferido para {$jogador->clube->nome}!");
+    }
 }
