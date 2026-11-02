@@ -40,4 +40,16 @@ class JogadorService
     {
         return DB::selectOne('SELECT * FROM fn_estatisticas_jogador(?)', [$jogador->id_jogador]);
     }
+    public function transferir(Jogador $jogador, int $clubeDestinoId, ?int $numeroCamisa = null): Jogador
+    {
+        return BancoDeDados::executar(function () use ($jogador, $clubeDestinoId, $numeroCamisa) {
+            DB::statement('CALL sp_transferir_jogador(?, ?, ?)', [
+                $jogador->id_jogador,
+                $clubeDestinoId,
+                $numeroCamisa,
+            ]);
+
+            return $jogador->refresh()->load('clube');
+        });
+    }
 }
