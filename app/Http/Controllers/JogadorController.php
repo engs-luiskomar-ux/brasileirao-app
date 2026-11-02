@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Requests\JogadorRequest;
+use App\Http\Requests\TransferenciaRequest;
+use Illuminate\Http\RedirectResponse;
 use App\Services;
 use App\Jogador;
 use Illuminate\Http\Request;
@@ -42,9 +46,11 @@ class JogadorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(JogadorRequest $request): RedirectResponse
     {
-        //
+        $jogador = $this->jogadores->criar($request->validated());
+
+        return redirect()->route('jogadores.show', $jogador)->with('sucesso', "{$jogador->nome} cadastrado!");
     }
 
     /**
