@@ -20,5 +20,54 @@ class PartidaTest extends TestCase
             return $partida;
         }
 
-        
+        // WEB
+          public function test_lista_de_partidas_mostra_o_placar_calculado_pela_function(): void
+    {
+        $partida = $this->partidaComPlacar(2);
+
+        $this->get("/partidas?temporada_id={$partida->temporada_id}&rodada=5")
+            ->assertOk()
+            ->assertSee($partida->mandante->nome)
+            ->assertSee($partida->visitante->nome)
+            ->assertSee('<b>2</b>×<b>0</b>', false);
+    }
+
+    public function test_cadastro_pela_tela_usa_a_procedure_sp_registrar_partida(): void
+    {
+        $temporada = Temporada::factory()->create(['ano' => 2012]);
+        [$mandante, $visitante] = Clube::factory()->count(2)->create();
+
+        $this->post('/partidas', [
+            'temporada_id' => $temporada->id_temporada,
+            'rodada' => 1,
+            'data_partida' => '2012-05-20T16:00',
+            'mandante_id' => $mandante->id_clube,
+            'visitante_id' => $visitante->id_clube,
+        ])->assertRedirect()->assertSessionHas('sucesso');
+
+        $this->assertDatabaseHas('partida', [
+            'temporada_id' => $temporada->id_temporada,
+            'rodada' => 1,
+            'mandante_id' => $mandante->id_clube,
+        ]);
+    }
+
+    public function test_procedure_impede_clube_com_dois_jogos_na_mesma_rodada(): void
+    {
+        $existente = Partida::factory()->create(['rodada' => 3]);
+        $outro = Clube::factory()->create();
+
+        $this->from('/partidas/create')->post('/partidas', [
+            'temporada_id' => $existente->temporada_id,
+            'rodada' => 3,
+            'data_partida' => $existente->temporada->ano.'-07-01 16:00',
+            'mandante_id' => $existente->mandante_id,   // já joga na rodada 3
+            'visitante_id' => $outro->id_clube,
+        ])
+            ->assertRedirect('/partidas/create')
+            ->assertSessionHas('erro', "O clube {$existente->mandante->nome} já tem uma partida na rodada 3.");
+
+        $this->assertDatabaseCount('partida', 1);
+    }
+
 }
