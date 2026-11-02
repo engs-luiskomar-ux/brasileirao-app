@@ -61,5 +61,13 @@ class JogadorTest extends TestCase
             ->assertJsonPath('data.nome', 'Jogador da API')
             ->assertJsonPath('data.clube.id', $clube->id_clube);
     }
+    public function test_api_procedure_bloqueia_transferencia_para_o_mesmo_clube(): void
+    {
+        $jogador = Jogador::factory()->create();
+
+        $this->postJson("/api/jogadores/{$jogador->id_jogador}/transferencias", ['clube_destino_id' => $jogador->clube_id])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', "{$jogador->nome} já pertence a esse clube.");
+    }
 
 }
