@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Services;
 use App\Jogador;
 use Illuminate\Http\Request;
 
+
 class JogadorController extends Controller
 {
+
+    public function __construct(
+        private readonly JogadorService $jogadores,
+        private readonly ClubeService $clubes,
+    ) {}
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return view('jogadores.index', [
+            'jogadores' => $this->jogadores->listar($request->only('busca', 'clube_id', 'posicao')),
+            'clubes' => $this->clubes->opcoes(),
+            'posicoes' => Jogador::POSICOES,
+        ]);
     }
 
     /**
