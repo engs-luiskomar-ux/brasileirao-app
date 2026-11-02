@@ -80,5 +80,20 @@ class JogadorTest extends TestCase
                 'estatisticas' => ['gols', 'amarelos', 'vermelhos', 'temporadas_com_gol', 'idade'],
             ]);
     }
+    public function test_api_procedure_bloqueia_camisa_ocupada_no_destino(): void
+    {
+        $destino = Clube::factory()->create();
+        Jogador::factory()->create(['clube_id' => $destino->id_clube, 'numero_camisa' => 7]);
+        $jogador = Jogador::factory()->create();
+
+        $this->postJson("/api/jogadores/{$jogador->id_jogador}/transferencias", [
+            'clube_destino_id' => $destino->id_clube,
+            'numero_camisa' => 7,
+        ])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'A camisa 7 já está em uso no clube de destino.');
+
+        $this->assertDatabaseCount('historico_transferencia', 0);
+    }
 
 }
