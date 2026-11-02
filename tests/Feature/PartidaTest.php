@@ -70,4 +70,50 @@ class PartidaTest extends TestCase
         $this->assertDatabaseCount('partida', 1);
     }
 
+    // Api
+
+      public function test_api_mostra_partida_com_placar_em_json(): void
+    {
+        $partida = $this->partidaComPlacar(3);
+
+        $this->getJson("/api/partidas/{$partida->id_partida}")
+            ->assertOk()
+            ->assertJsonStructure(['data' => ['id', 'temporada', 'rodada', 'data', 'realizada', 'mandante', 'visitante', 'placar']])
+            ->assertJsonPath('data.placar.mandante', 3)
+            ->assertJsonPath('data.placar.visitante', 0);
+    }
+
+    public function test_api_trigger_recusa_data_fora_da_temporada_com_422(): void
+    {
+        $partida = Partida::factory()->create();
+        $anoErrado = $partida->temporada->ano + 3;
+
+        $this->putJson("/api/partidas/{$partida->id_partida}", [
+            'temporada_id' => $partida->temporada_id,
+            'rodada' => $partida->rodada,
+            'data_partida' => "{$anoErrado}-05-01 16:00",
+            'mandante_id' => $partida->mandante_id,
+            'visitante_id' => $partida->visitante_id,
+        ])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', fn (string $mensagem) => str_contains($mensagem, 'está fora da temporada'));
+    }
+
+    public function test_api_cria_e_exclui_partida(): void
+    {
+        $temporada = Temporada::factory()->create(['ano' => 2011]);
+        [$mandante, $visitante] = Clube::factory()->count(2)->create();
+
+        $id = $this->postJson('/api/partidas', [
+            'temporada_id' => $temporada->id_temporada,
+            'rodada' => 10,
+            'data_partida' => '2011-08-10 21:30',
+            'mandante_id' => $mandante->id_clube,
+            'visitante_id' => $visitante->id_clube,
+        ])->assertCreated()->json('data.id');
+
+        $this->deleteJson("/api/partidas/{$id}")->assertNoContent();
+        $this->assertDatabaseMissing('partida', ['id_partida' => $id]);
+    }
+
 }
