@@ -69,5 +69,16 @@ class JogadorTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonPath('message', "{$jogador->nome} já pertence a esse clube.");
     }
+    public function test_api_show_traz_estatisticas(): void
+    {
+        $jogador = Jogador::factory()->create();
+
+        $this->getJson("/api/jogadores/{$jogador->id_jogador}")
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => ['id', 'nome', 'posicao', 'clube'],
+                'estatisticas' => ['gols', 'amarelos', 'vermelhos', 'temporadas_com_gol', 'idade'],
+            ]);
+    }
 
 }
