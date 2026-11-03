@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClassificacaoController;
 use App\Http\Controllers\ClubeController;
 use App\Http\Controllers\JogadorController;
 use App\Http\Controllers\PartidaController;
@@ -16,6 +17,9 @@ Route::resource('clubes', ClubeController::class)
 Route::resource('temporadas', TemporadaController::class)
     ->except(['show'])
     ->parameters(['temporadas' => 'temporada']);
+
+Route::get('classificacao', [ClassificacaoController::class, 'index'])
+    ->name('classificacao.index');
 
 Route::resource('jogadores', JogadorController::class)
     ->parameters(['jogadores' => 'jogador']);
