@@ -1,4 +1,4 @@
-SET search_path TO nelson_brasileirao_db;
+SET search_path TO nelson_brasileirao_db, public;
 
 -- Índice para consultas pelo nome do clube em letras minúsculas.
 CREATE INDEX IF NOT EXISTS idx_clube_nome_lower
