@@ -3,6 +3,14 @@
 use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
+Route::apiResource('clubes', Api\ClubeController::class)
+    ->parameters(['clubes' => 'clube'])
+    ->names('api.clubes');
+
+Route::get('classificacao/{ano}', Api\ClassificacaoController::class)
+    ->whereNumber('ano')
+    ->name('api.classificacao');
+
 Route::apiResource('jogadores', Api\JogadorController::class)
     ->parameters(['jogadores' => 'jogador'])
     ->names('api.jogadores');
