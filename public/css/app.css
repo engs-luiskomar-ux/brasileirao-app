@@ -1,0 +1,142 @@
+/* Estilos compartilhados das telas do Brasileirão DB. */
+
+:root {
+    --verde-escuro: #0b3d2e;
+    --verde: #12805c;
+    --verde-claro: #e7f5ee;
+    --ouro: #f2b705;
+    --vermelho: #c0392b;
+    --vermelho-claro: #fdecea;
+    --amarelo-cartao: #f4d03f;
+    --texto: #1d2b25;
+    --texto-suave: #5f6f68;
+    --borda: #dfe6e2;
+    --fundo: #f4f7f5;
+    --branco: #ffffff;
+    --raio: 12px;
+    --sombra: 0 1px 2px rgba(11, 61, 46, .06), 0 4px 16px rgba(11, 61, 46, .06);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    color: var(--texto);
+    background: var(--fundo);
+    line-height: 1.5;
+}
+
+a { color: var(--verde); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { width: min(1180px, 100% - 32px); margin-inline: auto; }
+
+/* ---------- topo / menu ---------- */
+.topo { background: linear-gradient(90deg, var(--verde-escuro), var(--verde)); color: #fff; box-shadow: var(--sombra); }
+.topo__conteudo { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; flex-wrap: wrap; }
+.marca { color: #fff; font-weight: 800; font-size: 1.25rem; letter-spacing: .3px; }
+.marca span { color: var(--ouro); }
+.marca:hover { text-decoration: none; }
+.menu { display: flex; gap: 4px; flex-wrap: wrap; }
+.menu a { color: #d8efe5; padding: 8px 12px; border-radius: 8px; font-weight: 600; font-size: .95rem; }
+.menu a:hover { background: rgba(255,255,255,.12); text-decoration: none; color: #fff; }
+.menu a.ativo { background: rgba(255,255,255,.18); color: #fff; }
+
+main.container { padding: 28px 0 48px; }
+
+.rodape { text-align: center; color: var(--texto-suave); font-size: .85rem; padding: 24px 0 32px; border-top: 1px solid var(--borda); }
+
+/* ---------- cabeçalho de página ---------- */
+.cabecalho { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.cabecalho h1 { margin: 0; font-size: 1.7rem; }
+.cabecalho p { margin: 4px 0 0; color: var(--texto-suave); }
+.acoes { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ---------- cartões ---------- */
+.card { background: var(--branco); border: 1px solid var(--borda); border-radius: var(--raio); box-shadow: var(--sombra); padding: 20px; margin-bottom: 20px; }
+.card h2 { margin: 0 0 14px; font-size: 1.15rem; }
+.grade { display: grid; gap: 20px; }
+.grade-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.grade-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.indicador { background: var(--branco); border: 1px solid var(--borda); border-radius: var(--raio); padding: 18px 20px; box-shadow: var(--sombra); }
+.indicador small { color: var(--texto-suave); font-weight: 600; text-transform: uppercase; font-size: .75rem; letter-spacing: .5px; }
+.indicador strong { display: block; font-size: 1.9rem; color: var(--verde-escuro); }
+
+/* ---------- tabelas ---------- */
+.tabela-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--borda); white-space: nowrap; }
+th { font-size: .78rem; text-transform: uppercase; letter-spacing: .4px; color: var(--texto-suave); background: #fafcfb; }
+tbody tr:hover { background: #f8fbf9; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.centro, th.centro { text-align: center; }
+.destaque td { background: var(--verde-claro); }
+.z-rebaixamento td:first-child { box-shadow: inset 4px 0 0 var(--vermelho); }
+.z-libertadores td:first-child { box-shadow: inset 4px 0 0 var(--verde); }
+
+/* ---------- placar ---------- */
+.placar { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.placar b { background: var(--verde-escuro); color: #fff; border-radius: 6px; min-width: 28px; text-align: center; padding: 2px 6px; }
+.placar-grande { display: flex; align-items: center; justify-content: center; gap: 28px; padding: 12px 0; flex-wrap: wrap; }
+.placar-grande .time { font-size: 1.4rem; font-weight: 800; min-width: 160px; text-align: center; }
+.placar-grande .gols { font-size: 3rem; font-weight: 900; color: var(--verde-escuro); font-variant-numeric: tabular-nums; }
+
+/* ---------- etiquetas ---------- */
+.tag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; background: var(--verde-claro); color: var(--verde-escuro); }
+.tag-cinza { background: #eef1f0; color: var(--texto-suave); }
+.tag-ouro { background: #fff4cc; color: #7a5b00; }
+.cartao { display: inline-block; width: 12px; height: 16px; border-radius: 2px; vertical-align: -3px; margin-right: 6px; }
+.cartao-amarelo { background: var(--amarelo-cartao); }
+.cartao-vermelho { background: var(--vermelho); }
+
+/* ---------- botões ---------- */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 8px; border: 1px solid transparent; font-weight: 700; font-size: .92rem; cursor: pointer; background: var(--verde); color: #fff; font-family: inherit; }
+.btn:hover { filter: brightness(1.07); text-decoration: none; }
+.btn-secundario { background: var(--branco); color: var(--verde-escuro); border-color: var(--borda); }
+.btn-perigo { background: var(--vermelho); }
+.btn-pequeno { padding: 5px 10px; font-size: .82rem; }
+.btn-link { background: none; border: 0; color: var(--vermelho); padding: 0; font-weight: 600; cursor: pointer; font-family: inherit; font-size: .9rem; }
+form.inline { display: inline; }
+
+/* ---------- formulários ---------- */
+.form { display: grid; gap: 16px; }
+.form-grade { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.campo label { display: block; font-weight: 700; font-size: .88rem; margin-bottom: 6px; }
+.campo input, .campo select, .campo textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--borda); border-radius: 8px; font: inherit; background: #fff;
+}
+.campo input:focus, .campo select:focus { outline: 2px solid rgba(18, 128, 92, .35); border-color: var(--verde); }
+.campo .ajuda { font-size: .8rem; color: var(--texto-suave); margin-top: 4px; }
+.campo .erro-campo { font-size: .82rem; color: var(--vermelho); margin-top: 4px; font-weight: 600; }
+.campo-check { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.filtros { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.filtros .campo { min-width: 170px; }
+
+/* ---------- alertas ---------- */
+.alerta { padding: 12px 16px; border-radius: 10px; margin-bottom: 18px; font-weight: 600; border: 1px solid; }
+.alerta-sucesso { background: var(--verde-claro); border-color: #b9e2cf; color: var(--verde-escuro); }
+.alerta-erro { background: var(--vermelho-claro); border-color: #f5c2bc; color: #8e2a20; }
+.alerta ul { margin: 6px 0 0; padding-left: 20px; font-weight: 500; }
+
+/* ---------- listas / diversos ---------- */
+.lista-dados { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; }
+.lista-dados dt { color: var(--texto-suave); font-weight: 600; }
+.lista-dados dd { margin: 0; }
+.vazio { text-align: center; color: var(--texto-suave); padding: 28px; }
+.linha-tempo { list-style: none; margin: 0; padding: 0; }
+.linha-tempo li { display: flex; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--borda); }
+.linha-tempo .minuto { font-weight: 800; color: var(--verde); min-width: 42px; }
+.texto-suave { color: var(--texto-suave); }
+
+/* ---------- paginação ---------- */
+.paginacao { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.paginacao .paginas { display: flex; gap: 6px; }
+.paginacao .desabilitado { opacity: .45; pointer-events: none; }
+
+@media (max-width: 640px) {
+    .cabecalho h1 { font-size: 1.4rem; }
+    .placar-grande .time { min-width: 0; font-size: 1.1rem; }
+    .placar-grande .gols { font-size: 2.2rem; }
+}
