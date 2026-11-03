@@ -65,3 +65,29 @@ AS $$
       JOIN clube c ON c.id_clube = t.id_clube
      ORDER BY 1;
 $$;
+
+-- Procedure que cadastra uma temporada e devolve o identificador criado
+CREATE OR REPLACE PROCEDURE sp_criar_temporada(
+    IN p_ano integer,
+    IN p_nome varchar DEFAULT NULL,
+    INOUT p_id_temporada integer DEFAULT NULL
+)
+LANGUAGE plpgsql
+SET search_path = nelson_brasileirao_db, public
+AS $$
+DECLARE
+    v_ano_maximo integer := extract(year FROM current_date)::integer + 1;
+BEGIN
+    IF p_ano IS NULL OR p_ano < 1971 OR p_ano > v_ano_maximo THEN
+        RAISE EXCEPTION 'Ano % inválido: informe um ano entre 1971 e %.', p_ano, v_ano_maximo;
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM temporada WHERE ano = p_ano) THEN
+        RAISE EXCEPTION 'A temporada % já está cadastrada.', p_ano;
+    END IF;
+
+    INSERT INTO temporada (ano, nome)
+    VALUES (p_ano, COALESCE(NULLIF(trim(p_nome), ''), 'Brasileirão ' || p_ano))
+    RETURNING id_temporada INTO p_id_temporada;
+END;
+$$;
