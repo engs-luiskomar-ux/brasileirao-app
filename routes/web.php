@@ -7,10 +7,6 @@ use App\Http\Controllers\PartidaController;
 use App\Http\Controllers\TemporadaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::resource('clubes', ClubeController::class)
     ->parameters(['clubes' => 'clube']);
 
