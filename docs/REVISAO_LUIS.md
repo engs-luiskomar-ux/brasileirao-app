@@ -1,6 +1,6 @@
 # Revisão da parte do Luis
 
-Conferência em 03/11/2026, na branch `Luis`.
+Conferência em 03/11/2026, na branch `Luis`. A parte do Luis foi integrada à `main` na mesma data, preservando os 30 commits.
 
 ## O que foi concluído
 
@@ -40,6 +40,19 @@ Na classificação de 2019, a function retornou Flamengo com 90 pontos e 38 jogo
 
 Os quatro índices do projeto, quatro functions de negócio, quatro procedures e quatro triggers já estão instalados no schema do grupo. Isso atende à quantidade mínima de objetos de banco do enunciado.
 
+## Situação das branches
+
+| Integrante | Integração na main | O que falta |
+|---|---|---|
+| Luis | Concluída | Parte implementada e testes próprios passando |
+| João | Seus commits já estavam na main | Corrigir os problemas de partidas encontrados na suíte completa |
+| Nelson | Seus commits da branch `nelson` já estavam na main | Corrigir jogadores e incluir backup/restauração e o SQL original |
+| Thiago | 21 commits ainda fora da main | Integrar gols, cartões, estatísticas e painel; incluir os testes de eventos e o SQL de demonstração |
+
+A comparação com os arquivos de referência encontrou todos os arquivos de implementação previstos do João, com um nome de migration diferente. No Nelson, os models de jogador e histórico estão em `app/` e os imports precisam respeitar esse namespace. A branch `Nelson` com inicial maiúscula contém só a base inicial; o desenvolvimento está em `nelson`.
+
+Na própria branch do Thiago ainda não foram encontrados `tests/Feature/EventoPartidaTest.php` e `database/sql/06_demonstracao.sql`. A configuração do banco de testes já foi incluída na parte do Luis.
+
 ## Pendências do grupo
 
 1. Integrar a branch do Thiago. A branch `Luis` ainda não tem as migrations oficiais de gols e cartões, seus models/factories, módulos de eventos, estatísticas e painel.
@@ -49,6 +62,7 @@ Os quatro índices do projeto, quatro functions de negócio, quatro procedures e
 5. Versionar os scripts de backup/restauração e apresentar evidências da execução. Esses arquivos e evidências não foram encontrados nesta branch.
 6. Incluir o SQL original de estrutura/dados ou o backup necessário para reproduzir o banco do primeiro bimestre. Ele foi fornecido no pacote de referência, mas ainda não está versionado nesta branch.
 7. Preparar o relatório PDF do grupo, com responsabilidades, metodologia, etapas e datas, e a demonstração de cada integrante.
-8. Integrar a parte do Luis na `main` por pull request. A conferência foi feita na branch `Luis`.
+
+A atualização da main foi feita por avanço direto pelo Git. A integração conectada do GitHub recusou a criação de pull request com erro de permissão (403); nenhum histórico foi reescrito.
 
 A implementação da parte do Luis está concluída e testada. A entrega completa do grupo depende das pendências acima.
