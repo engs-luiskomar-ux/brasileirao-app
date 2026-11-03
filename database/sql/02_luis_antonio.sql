@@ -91,3 +91,41 @@ BEGIN
     RETURNING id_temporada INTO p_id_temporada;
 END;
 $$;
+
+-- Normaliza e valida cada clube antes de cadastrar ou atualizar.
+CREATE OR REPLACE FUNCTION fn_trg_clube_normaliza()
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = nelson_brasileirao_db, public
+AS $$
+BEGIN
+    NEW.nome   := regexp_replace(trim(NEW.nome),   '\s+', ' ', 'g');
+    NEW.cidade := regexp_replace(trim(NEW.cidade), '\s+', ' ', 'g');
+    NEW.estado := upper(trim(NEW.estado));
+
+    IF NEW.estado NOT IN ('AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA',
+                          'PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO') THEN
+        RAISE EXCEPTION 'UF "%" inválida.', NEW.estado;
+    END IF;
+
+    IF NEW.ano_fundacao IS NOT NULL
+       AND NEW.ano_fundacao > extract(year FROM current_date)::integer THEN
+        RAISE EXCEPTION 'Ano de fundação (%) não pode estar no futuro.', NEW.ano_fundacao;
+    END IF;
+
+    IF EXISTS (SELECT 1
+                 FROM clube
+                WHERE lower(nome) = lower(NEW.nome)
+                  AND id_clube IS DISTINCT FROM NEW.id_clube) THEN
+        RAISE EXCEPTION 'Já existe um clube chamado "%".', NEW.nome;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_clube_normaliza ON clube;
+CREATE TRIGGER trg_clube_normaliza
+    BEFORE INSERT OR UPDATE ON clube
+    FOR EACH ROW
+    EXECUTE FUNCTION fn_trg_clube_normaliza();
