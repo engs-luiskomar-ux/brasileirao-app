@@ -4,7 +4,7 @@ Projeto do 2º bimestre de Banco de Dados II e Back-end.
 
 Equipe: Luis Antonio, João Vitor, Nelson e Thiago.
 
-Laravel 12, Blade e PostgreSQL no Neon. A parte do Luis tem clubes, temporadas e classificação, com telas e API.
+Laravel 12, Blade e PostgreSQL no Neon. Tem clubes, temporadas, jogadores, transferências, partidas, gols, cartões e estatísticas, com telas e API.
 Usamos o banco do Nelson do 1º bimestre porque ele já reúne clubes, jogadores, temporadas, partidas, gols e cartões do mesmo campeonato.
 
 ## Como rodar
@@ -24,17 +24,29 @@ php artisan db:verificar
 php artisan serve
 ```
 
-Abra http://localhost:8000/clubes. Não precisa de npm para essas telas.
-O banco do grupo já existe e tem os objetos SQL. Para instalar em um banco vazio, primeiro integre as migrations de gols e cartões do Thiago. Não use `migrate:fresh`, rollback ou restauração no banco compartilhado.
+Abra http://localhost:8000. Não precisa de npm para essas telas.
+O banco do grupo já existe. Para criar a estrutura em um banco vazio separado, configure o `.env` para esse banco e rode `php artisan migrate`. Para trazer os dados do 1º bimestre, veja [docs/BACKUP.md](docs/BACKUP.md).
+Não use `migrate:fresh`, rollback ou restauração no banco compartilhado.
 
 ## Rotas
 
 - `/clubes`: cadastro, listagem, detalhes, edição e exclusão.
 - `/temporadas`: cadastro, listagem, edição e exclusão.
 - `/classificacao?ano=2019`: classificação da temporada.
+- `/jogadores`: cadastro e transferência de jogadores.
+- `/partidas`: cadastro, placares e súmula com gols e cartões.
+- `/estatisticas/artilharia` e `/estatisticas/cartoes`: rankings.
 - `GET/POST /api/clubes`: consulta e cadastro em JSON.
 - `GET/PUT/PATCH/DELETE /api/clubes/{id}`: operações de um clube.
 - `GET /api/classificacao/{ano}`: classificação em JSON.
+- `/api/jogadores`, `/api/partidas` e `/api/gols`: CRUD em JSON.
+- `POST /api/jogadores/{id}/transferencias`: transferência.
+- `POST /api/partidas/{id}/cartoes`: registrar cartão.
+- `GET /api/artilharia?ano=2019`: artilheiros.
+
+As respostas da API ficam em `data`. Nas partidas, a data do jogo se chama `data_partida`.
+No cadastro de gol, `contra: true` credita o adversário e não aumenta a artilharia do jogador. Em gols antigos, `contra: null` significa que o backup não informa o tipo.
+O cartão vermelho gerado por dois amarelos é cancelado removendo um dos amarelos.
 
 Exemplo de corpo para `POST /api/clubes` (envie `Content-Type: application/json`):
 
@@ -46,11 +58,11 @@ A API usa 200 para consultas/atualizações, 201 para cadastro, 204 para exclus�
 
 ## Branches
 
-`main` é a base do grupo. Cada um trabalha na sua: `Luis`, `Joao`, `Nelson` ou `Thiago`, e abre um pull request para a `main`.
+`main` é a base do grupo. Cada um trabalha na sua: `Luis`, `Joao`, `nelson` ou `Thiago`, e abre um pull request para a `main`. O Nelson usou a branch com inicial minúscula.
 
 Luis: base, clubes, temporadas e classificação. João: partidas. Nelson: jogadores, transferências e backup. Thiago: gols, cartões, estatísticas e painel.
 
-## Testes do Luis
+## Testes
 
 Use PostgreSQL local em um banco separado chamado `brasileirao_test`. Os testes recriam as tabelas desse banco.
 
@@ -58,10 +70,8 @@ Use PostgreSQL local em um banco separado chamado `brasileirao_test`. Os testes 
 createdb -h 127.0.0.1 -U postgres brasileirao_test
 copy .env.testing.example .env.testing
 php artisan key:generate --env=testing
-php artisan test --filter="ClubeWebTest|ClubeApiTest|BaseTest"
+php artisan test
 ```
 
 Ajuste usuário, senha e porta em `.env.testing`. A configuração dos testes força host local e o banco `brasileirao_test`.
-Há uma migration de apoio em `tests/Fixtures/migrations` para as tabelas de eventos que ainda não vieram da branch do Thiago; ela só é usada nos testes e não substitui as migrations oficiais.
-
-`php artisan test` executa também os testes dos colegas. As pendências da revisão estão em [docs/REVISAO_LUIS.md](docs/REVISAO_LUIS.md).
+Os testes usam as migrations oficiais dos quatro integrantes.

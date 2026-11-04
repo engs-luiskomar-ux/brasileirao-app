@@ -39,7 +39,7 @@
                 @forelse ($tabela as $linha)
                     <tr @class([
                         'z-libertadores' => $linha->posicao <= 4,
-                        'z-rebaixamento' => $linha->posicao > $tabela->count() - 4,
+                        'z-rebaixamento' => $tabela->count() >= 8 && $linha->posicao > $tabela->count() - 4,
                     ])>
                         <td class="num"><strong>{{ $linha->posicao }}</strong></td>
                         <td><a href="{{ route('clubes.show', $linha->clube_id) }}">{{ $linha->clube }}</a></td>

@@ -1,4 +1,4 @@
--- Thiago - página inicial com números de todos os módulos 
+{{-- Página inicial com números de todos os módulos. --}}
 @extends('layouts.app')
 
 @section('titulo', 'Início')
@@ -21,7 +21,7 @@
         <div class="indicador"><small>Partidas</small><strong>{{ number_format($totais['partidas'], 0, ',', '.') }}</strong></div>
         <div class="indicador"><small>Gols</small><strong>{{ number_format($totais['gols'], 0, ',', '.') }}</strong></div>
         <div class="indicador"><small>Cartões</small><strong>{{ number_format($totais['cartoes'], 0, ',', '.') }}</strong></div>
-        <div class="indicador"><small>Gols por partida</small><strong>{{ number_format($totais['media_gols'], 2, ',', '.') }}</strong></div>
+        <div class="indicador"><small>Gols por partida realizada</small><strong>{{ number_format($totais['media_gols'], 2, ',', '.') }}</strong></div>
     </div>
 
     <div class="grade grade-2">

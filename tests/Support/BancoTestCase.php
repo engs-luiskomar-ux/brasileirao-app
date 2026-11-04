@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Tests\TestCase;
 
-abstract class BancoDoLuisTestCase extends TestCase
+abstract class BancoTestCase extends TestCase
 {
     use RefreshDatabase;
 
@@ -25,16 +25,10 @@ abstract class BancoDoLuisTestCase extends TestCase
             || ! empty($conexao['url'])) {
             throw new RuntimeException('Use somente o PostgreSQL local brasileirao_test para executar estes testes.');
         }
-    }
 
-    protected function migrateFreshUsing(): array
-    {
-        return [
-            '--path' => ['database/migrations', 'tests/Fixtures/migrations'],
-            '--drop-views' => true,
-            '--drop-types' => true,
-            '--seed' => false,
-        ];
+        // A primeira migration cria o schema. O histórico precisa ficar no mesmo
+        // lugar antes e depois disso, inclusive ao rodar a suíte novamente.
+        config(['database.migrations.table' => 'public.migrations']);
     }
 
     protected function partidaComGol(int $ano = 2010): Partida

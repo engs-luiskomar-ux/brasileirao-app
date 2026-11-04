@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Requests\FiltroRequest;
 use App\Http\Requests\JogadorRequest;
 use App\Http\Requests\TransferenciaRequest;
-use Illuminate\Http\RedirectResponse;
-use App\Services;
 use App\Jogador;
-use Illuminate\Http\Request;
+use App\Services\ClubeService;
+use App\Services\JogadorService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-
 
 class JogadorController extends Controller
 {
-
     public function __construct(
         private readonly JogadorService $jogadores,
         private readonly ClubeService $clubes,
     ) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(FiltroRequest $request): View
     {
         return view('jogadores.index', [
             'jogadores' => $this->jogadores->listar($request->only('busca', 'clube_id', 'posicao')),
@@ -97,6 +96,7 @@ class JogadorController extends Controller
 
         return redirect()->route('jogadores.index')->with('sucesso', 'Jogador excluído.');
     }
+
     public function transferir(TransferenciaRequest $request, Jogador $jogador): RedirectResponse
     {
         $jogador = $this->jogadores->transferir(

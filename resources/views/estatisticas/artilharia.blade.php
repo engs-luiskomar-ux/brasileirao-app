@@ -1,4 +1,4 @@
--- Thiago - artilharia, calculada pela function 
+{{-- Artilharia calculada pela function. --}}
 @extends('layouts.app')
 
 @section('titulo', 'Artilharia')

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// Thiago - Tabela gol. clube_id = clube que recebeu o gol - em gol contra, o adversário.
+// Thiago - Tabela gol. clube_id é o clube creditado no placar.
 return new class extends Migration
 {
     public function up(): void

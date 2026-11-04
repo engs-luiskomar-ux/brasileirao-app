@@ -6,7 +6,6 @@ use App\Jogador;
 use App\Models\Partida;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-
 // Thiago - gera um gol falso para os testes.
 // o jogador é do mandante da partida e o clube_id fica nulo para a trigger preencher.
 class GolFactory extends Factory
@@ -20,6 +19,7 @@ class GolFactory extends Factory
                 'clube_id' => Partida::find($atributos['partida_id'])->mandante_id,
             ])->id_jogador,
             'clube_id' => null,
+            'contra' => false,
         ];
     }
 }

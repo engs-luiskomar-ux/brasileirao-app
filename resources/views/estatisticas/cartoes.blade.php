@@ -1,4 +1,4 @@
--- Thiago - ranking de cartões 
+{{-- Ranking de cartões. --}}
 @extends('layouts.app')
 
 @section('titulo', 'Cartões')

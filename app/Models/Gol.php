@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
+use App\Jogador;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Jogador;
 
 // Thiago - model da tabela gol.
-// clube_id = clube que recebeu o gol. Se vier vazio, a trigger preenche com o clube do jogador.
+// clube_id é o clube creditado no placar; a trigger considera também o gol contra.
 class Gol extends Model
 {
     use HasFactory;
 
     protected $table = 'gol';
+
     protected $primaryKey = 'id_gol';
+
     public $timestamps = false;
 
-    protected $fillable = ['minuto', 'partida_id', 'jogador_id', 'clube_id'];
+    protected $fillable = ['minuto', 'partida_id', 'jogador_id', 'clube_id', 'contra'];
 
     protected function casts(): array
     {
@@ -26,6 +28,7 @@ class Gol extends Model
             'partida_id' => 'integer',
             'jogador_id' => 'integer',
             'clube_id' => 'integer',
+            'contra' => 'boolean',
         ];
     }
 

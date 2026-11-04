@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\RegraNegocioException;
 use App\Models\Temporada;
 use App\Support\BancoDeDados;
 use Illuminate\Support\Collection;
@@ -26,6 +27,11 @@ class TemporadaService
     public function atualizar(Temporada $temporada, array $dados): Temporada
     {
         return BancoDeDados::executar(function () use ($temporada, $dados) {
+            $temporada = Temporada::query()->lockForUpdate()->findOrFail($temporada->id_temporada);
+            if ((int) $dados['ano'] !== $temporada->ano && $temporada->partidas()->exists()) {
+                throw new RegraNegocioException('Não é possível mudar o ano de uma temporada que já tem partidas.');
+            }
+
             $temporada->update([
                 'ano' => $dados['ano'],
                 'nome' => ($dados['nome'] ?? null) ?: "Brasileirão {$dados['ano']}",

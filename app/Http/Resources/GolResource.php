@@ -14,6 +14,7 @@ class GolResource extends JsonResource
             'id' => $this->id_gol,
             'partida_id' => $this->partida_id,
             'minuto' => $this->minuto,
+            'contra' => $this->contra,
             'jogador' => $this->whenLoaded('jogador', fn () => [
                 'id' => $this->jogador->id_jogador,
                 'nome' => $this->jogador->nome,

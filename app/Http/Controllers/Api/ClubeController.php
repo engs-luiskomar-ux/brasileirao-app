@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClubeRequest;
+use App\Http\Requests\FiltroRequest;
 use App\Http\Resources\ClubeResource;
 use App\Models\Clube;
 use App\Services\ClubeService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -16,7 +16,7 @@ class ClubeController extends Controller
 {
     public function __construct(private readonly ClubeService $clubes) {}
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(FiltroRequest $request): AnonymousResourceCollection
     {
         return ClubeResource::collection(
             $this->clubes->listar($request->query('busca'), $request->query('estado'))

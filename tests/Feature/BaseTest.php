@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
+use Tests\Support\BancoTestCase;
 
-class BaseTest extends TestCase
+class BaseTest extends BancoTestCase
 {
     public function test_pagina_inicial_abre(): void
     {

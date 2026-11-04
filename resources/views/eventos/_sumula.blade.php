@@ -1,4 +1,4 @@
--- Thiago - súmula da partida gols e cartões
+{{-- Súmula da partida: gols e cartões. --}}
 @inject('eventos', 'App\Services\EventoPartidaService')
 @php($sumula = $eventos->sumula($partida))
 
@@ -13,6 +13,7 @@
                     <span>
                         <a href="{{ route('jogadores.show', $gol->jogador_id) }}"><strong>{{ $gol->jogador->nome }}</strong></a>
                         <span class="texto-suave">— gol do {{ $gol->clube->nome }}</span>
+                        @if ($gol->contra) <span class="tag">contra</span> @endif
                     </span>
                     <form method="POST" action="{{ route('gols.destroy', $gol) }}" class="inline" style="margin-left:auto"
                           onsubmit="return confirm('Remover este gol?')">
@@ -58,12 +59,16 @@
                         <strong>{{ $cartao->jogador->nome }}</strong>
                         <span class="texto-suave">({{ $cartao->jogador->clube->nome }})</span>
                     </span>
+                    @if ($cartao->automatico)
+                        <span class="texto-suave" style="margin-left:auto">automático; remova um amarelo para cancelar</span>
+                    @else
                     <form method="POST" action="{{ route('cartoes.destroy', $cartao) }}" class="inline" style="margin-left:auto"
                           onsubmit="return confirm('Remover este cartão?')">
                         @csrf
                         @method('DELETE')
                         <button class="btn-link">remover</button>
                     </form>
+                    @endif
                 </li>
             @empty
                 <li class="texto-suave">Nenhum cartão registrado.</li>

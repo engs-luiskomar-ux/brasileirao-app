@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Jogador;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Jogador;
 
 // Thiago - model da tabela cartao.
 // o cadastro pela aplicação passa pela procedure sp_registrar_cartao.
@@ -16,7 +16,9 @@ class Cartao extends Model
     public const TIPOS = ['amarelo', 'vermelho'];
 
     protected $table = 'cartao';
+
     protected $primaryKey = 'id_cartao';
+
     public $timestamps = false;
 
     protected $fillable = ['minuto', 'tipo', 'partida_id', 'jogador_id'];
@@ -27,6 +29,7 @@ class Cartao extends Model
             'minuto' => 'integer',
             'partida_id' => 'integer',
             'jogador_id' => 'integer',
+            'automatico' => 'boolean',
         ];
     }
 

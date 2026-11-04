@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Jogador;
-use App\Http\Requests\TransferenciaRequest;
+use App\Http\Requests\FiltroRequest;
 use App\Http\Requests\JogadorRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\TransferenciaRequest;
+use App\Http\Resources\JogadorResource;
+use App\Jogador;
 use App\Services\JogadorService;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\JogadorResource;
-use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class JogadorController extends Controller
 {
     public function __construct(private readonly JogadorService $jogadores) {}
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(FiltroRequest $request): AnonymousResourceCollection
     {
         return JogadorResource::collection(
             $this->jogadores->listar($request->only('busca', 'clube_id', 'posicao'))
@@ -57,6 +57,7 @@ class JogadorController extends Controller
 
         return response()->noContent();
     }
+
     public function transferir(TransferenciaRequest $request, Jogador $jogador): JogadorResource
     {
         $jogador = $this->jogadores->transferir(

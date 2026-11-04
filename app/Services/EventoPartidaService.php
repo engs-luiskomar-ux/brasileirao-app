@@ -11,7 +11,7 @@ use App\Support\BancoDeDados;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
-// Thiago - gols e cartões da partida 
+// Thiago - gols e cartões da partida
 // gol - insert comum, a trigger trg_gol_valida define o clube e barra jogador expulso
 // cartão - chama a procedure sp_registrar_cartao que caso ganhar o 2º amarelo vira vermelho
 class EventoPartidaService
@@ -42,8 +42,7 @@ class EventoPartidaService
             ->withQueryString();
     }
 
-    // gol normal - clube_id vai nulo e a trigger usa o clube do jogador
-    // gol contra - o PHP calcula o adversário e manda o clube_id pronto
+    // A trigger define o clube creditado de acordo com o tipo do gol.
     public function registrarGol(Partida $partida, int $jogadorId, int $minuto, bool $contra = false): Gol
     {
         return BancoDeDados::executar(function () use ($partida, $jogadorId, $minuto, $contra) {
@@ -51,7 +50,8 @@ class EventoPartidaService
                 'partida_id' => $partida->id_partida,
                 'jogador_id' => $jogadorId,
                 'minuto' => $minuto,
-                'clube_id' => $contra ? $this->adversarioDoJogador($partida, $jogadorId) : null,
+                'clube_id' => null,
+                'contra' => $contra,
             ]);
 
             return $gol->refresh()->load(['jogador', 'clube']);
@@ -61,18 +61,8 @@ class EventoPartidaService
     public function atualizarGol(Gol $gol, array $dados): Gol
     {
         return BancoDeDados::executar(function () use ($gol, $dados) {
-            $alteracoes = ['minuto' => $dados['minuto'] ?? $gol->minuto];
-
-            // só recalcula o clube se o jogador ou o contra mudarem
-            if (array_key_exists('jogador_id', $dados) || array_key_exists('contra', $dados)) {
-                $jogadorId = (int) ($dados['jogador_id'] ?? $gol->jogador_id);
-                $contra = filter_var($dados['contra'] ?? false, FILTER_VALIDATE_BOOLEAN);
-
-                $alteracoes['jogador_id'] = $jogadorId;
-                $alteracoes['clube_id'] = $contra ? $this->adversarioDoJogador($gol->partida, $jogadorId) : null;
-            }
-
-            $gol->update($alteracoes);
+            // Omitir "contra" preserva o tipo e o clube creditado, inclusive após transferência.
+            $gol->update(array_intersect_key($dados, array_flip(['minuto', 'jogador_id', 'contra'])));
 
             return $gol->refresh()->load(['jogador', 'clube']);
         });
@@ -100,17 +90,19 @@ class EventoPartidaService
 
     public function removerCartao(Cartao $cartao): void
     {
-        BancoDeDados::executar(fn () => $cartao->delete());
-    }
-
-    private function adversarioDoJogador(Partida $partida, int $jogadorId): int
-    {
-        $clubeDoJogador = Jogador::findOrFail($jogadorId)->clube_id;
-
-        return match ($clubeDoJogador) {
-            $partida->mandante_id => $partida->visitante_id,
-            $partida->visitante_id => $partida->mandante_id,
-            default => throw new RegraNegocioException('Gol contra: o jogador precisa ser de um dos clubes da partida.'),
-        };
+        BancoDeDados::executar(function () use ($cartao) {
+            Partida::query()->lockForUpdate()->findOrFail($cartao->partida_id);
+            $cartao->refresh();
+            if ($cartao->automatico) {
+                throw new RegraNegocioException('Remova um dos cartões amarelos para cancelar esta expulsão automática.');
+            }
+            $cartao->delete();
+            if ($cartao->tipo === 'amarelo') {
+                $cartoes = Cartao::query()->where('partida_id', $cartao->partida_id)->where('jogador_id', $cartao->jogador_id);
+                if ((clone $cartoes)->where('tipo', 'amarelo')->count() < 2) {
+                    $cartoes->where('automatico', true)->delete();
+                }
+            }
+        });
     }
 }

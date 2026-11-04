@@ -13,20 +13,20 @@ class PartidaResource extends JsonResource
             'id' => $this->id_partida,
             'temporada' => $this->whenLoaded('temporada', fn () => $this->temporada->ano),
             'rodada' => $this->rodada,
-            'data' => $this->data_partida->format('Y-m-d H:i'),
-            'realizada' => $this->realizada,
-            'mandante' => $this->whenLoaded('mandante', fn() => [
+            'data_partida' => $this->data_partida->format('Y-m-d H:i'),
+            'realizada' => $this->realizada(),
+            'mandante' => $this->whenLoaded('mandante', fn () => [
                 'id' => $this->mandante->id_clube,
                 'nome' => $this->mandante->nome,
             ]),
-            'visitante' => $this->whenLoaded('visitante', fn() => [
+            'visitante' => $this->whenLoaded('visitante', fn () => [
                 'id' => $this->visitante->id_clube,
                 'nome' => $this->visitante->nome,
             ]),
             'placar' => [
                 'mandante' => (int) $this->gols_mandante,
-                'visitante' => (int) $this->gols_visitante
-            ]
+                'visitante' => (int) $this->gols_visitante,
+            ],
         ];
     }
 }

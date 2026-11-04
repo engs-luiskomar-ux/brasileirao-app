@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Jogador;
 use App\Support\BancoDeDados;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class JogadorService
@@ -20,26 +21,37 @@ class JogadorService
             ->paginate($porPagina)
             ->withQueryString();
     }
+
     public function criar(array $dados): Jogador
     {
         return BancoDeDados::executar(fn () => Jogador::create($dados)->load('clube'));
     }
+
     public function atualizar(Jogador $jogador, array $dados): Jogador
     {
         return BancoDeDados::executar(function () use ($jogador, $dados) {
+            $jogador = Jogador::query()->lockForUpdate()->findOrFail($jogador->id_jogador);
+            if (isset($dados['clube_id']) && (int) $dados['clube_id'] !== $jogador->clube_id) {
+                $this->transferir($jogador, (int) $dados['clube_id'], $dados['numero_camisa'] ?? null);
+                // O número da camisa é resolvido pela mesma procedure da tela de transferência.
+                unset($dados['clube_id'], $dados['numero_camisa']);
+            }
             $jogador->update($dados);
 
             return $jogador->refresh()->load('clube');
         });
     }
+
     public function excluir(Jogador $jogador): void
     {
         BancoDeDados::executar(fn () => $jogador->delete());
     }
+
     public function estatisticas(Jogador $jogador): object
     {
         return DB::selectOne('SELECT * FROM fn_estatisticas_jogador(?)', [$jogador->id_jogador]);
     }
+
     public function transferir(Jogador $jogador, int $clubeDestinoId, ?int $numeroCamisa = null): Jogador
     {
         return BancoDeDados::executar(function () use ($jogador, $clubeDestinoId, $numeroCamisa) {
@@ -52,6 +64,7 @@ class JogadorService
             return $jogador->refresh()->load('clube');
         });
     }
+
     public function historico(Jogador $jogador): Collection
     {
         return $jogador->transferencias()

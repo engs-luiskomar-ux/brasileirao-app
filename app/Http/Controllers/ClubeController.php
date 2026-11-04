@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClubeRequest;
+use App\Http\Requests\FiltroRequest;
 use App\Models\Clube;
 use App\Services\ClassificacaoService;
 use App\Services\ClubeService;
 use App\Services\TemporadaService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ClubeController extends Controller
 {
     public function __construct(private readonly ClubeService $clubes) {}
 
-    public function index(Request $request): View
+    public function index(FiltroRequest $request): View
     {
         return view('clubes.index', [
             'clubes' => $this->clubes->listar($request->query('busca'), $request->query('estado')),

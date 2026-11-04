@@ -5,10 +5,35 @@ namespace Tests\Feature;
 use App\Models\Clube;
 use App\Models\Partida;
 use App\Models\Temporada;
-use Tests\Support\BancoDoLuisTestCase;
+use Tests\Support\BancoTestCase;
 
-class ClubeWebTest extends BancoDoLuisTestCase
+class ClubeWebTest extends BancoTestCase
 {
+    public function test_editar_ano_da_temporada_com_partidas_e_recusado_sem_alterar_dados(): void
+    {
+        $partida = Partida::factory()->create();
+        $temporada = $partida->temporada;
+
+        $this->from('/temporadas')->put('/temporadas/'.$temporada->id_temporada, [
+            'ano' => $temporada->ano + 2, 'nome' => 'Ano alterado',
+        ])->assertRedirect('/temporadas')->assertSessionHas('erro');
+
+        $this->assertDatabaseHas('temporada', ['id_temporada' => $temporada->id_temporada, 'ano' => $temporada->ano]);
+        $this->put('/temporadas/'.$temporada->id_temporada, ['ano' => $temporada->ano, 'nome' => 'Nome atualizado'])
+            ->assertSessionHas('sucesso');
+    }
+
+    public function test_tabela_pequena_nao_marca_clubes_do_g4_como_rebaixados(): void
+    {
+        $this->partidaComGol();
+        $this->get('/classificacao?ano=2010')->assertOk()->assertDontSee('class="z-libertadores z-rebaixamento"', false);
+    }
+
+    public function test_filtro_invalido_na_tela_retorna_mensagem_em_vez_de_erro_500(): void
+    {
+        $this->from('/clubes')->get('/clubes?busca[]=x')->assertRedirect('/clubes')->assertSessionHasErrors('busca');
+    }
+
     public function test_listagem_filtra_por_nome_e_uf(): void
     {
         Clube::factory()->create(['nome' => 'Campo Real FC', 'estado' => 'PR']);

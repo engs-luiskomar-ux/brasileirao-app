@@ -1,6 +1,6 @@
 SET search_path TO nelson_brasileirao_db, public;
 
--- correcao das pretice do chat do ultimo trabalho
+-- Padroniza a posição cadastrada com erro de digitação.
 UPDATE jogador SET posicao = 'Zagueiro' WHERE posicao = 'Zagueira';
 
 -- regras de check

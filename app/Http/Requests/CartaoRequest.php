@@ -17,7 +17,7 @@ class CartaoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'jogador_id' => ['required', 'integer', 'exists:jogador,id_jogador'],
+            'jogador_id' => ['bail', 'required', 'integer', 'between:1,2147483647', 'exists:jogador,id_jogador'],
             'minuto' => ['required', 'integer', 'between:0,120'],
             'tipo' => ['required', Rule::in(Cartao::TIPOS)],
         ];

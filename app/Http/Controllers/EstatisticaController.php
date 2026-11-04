@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FiltroRequest;
 use App\Models\Temporada;
 use App\Services\EstatisticaService;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 // Thiago - telas de estatísticas artilharia e ranking de cartões.
@@ -12,7 +12,7 @@ class EstatisticaController extends Controller
 {
     public function __construct(private readonly EstatisticaService $estatisticas) {}
 
-    public function artilharia(Request $request): View
+    public function artilharia(FiltroRequest $request): View
     {
         $ano = $request->integer('ano') ?: null;
 
@@ -23,7 +23,7 @@ class EstatisticaController extends Controller
         ]);
     }
 
-    public function cartoes(Request $request): View
+    public function cartoes(FiltroRequest $request): View
     {
         $ano = $request->integer('ano') ?: null;
 

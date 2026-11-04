@@ -25,7 +25,7 @@ class CartaoController extends Controller
         $cartoes = $partida->cartoes()
             ->where('jogador_id', $request->integer('jogador_id'))
             ->orderBy('id_cartao')
-            ->get(['id_cartao as id', 'minuto', 'tipo']);
+            ->get(['id_cartao as id', 'minuto', 'tipo', 'automatico']);
 
         return response()->json(['message' => $mensagem, 'cartoes_do_jogador' => $cartoes], 201);
     }

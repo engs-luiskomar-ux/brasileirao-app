@@ -26,3 +26,4 @@ yarn-error.log
 !.env.testing.example
 *.dump
 *.backup
+/backups/

@@ -23,7 +23,7 @@ class TransferenciaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'clube_destino_id' => ['required', 'integer', 'exists:clube,id_clube'],
+            'clube_destino_id' => ['bail', 'required', 'integer', 'between:1,2147483647', 'exists:clube,id_clube'],
             'numero_camisa' => ['nullable', 'integer', 'between:1,99'],
         ];
     }

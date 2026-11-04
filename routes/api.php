@@ -8,7 +8,7 @@ Route::apiResource('clubes', Api\ClubeController::class)
     ->names('api.clubes');
 
 Route::get('classificacao/{ano}', Api\ClassificacaoController::class)
-    ->whereNumber('ano')
+    ->where('ano', '[0-9]{4}')
     ->name('api.classificacao');
 
 Route::apiResource('jogadores', Api\JogadorController::class)
@@ -22,7 +22,6 @@ Route::post('jogadores/{jogador}/transferencias', [Api\JogadorController::class,
 Route::apiResource('partidas', Api\PartidaController::class)
     ->parameters(['partidas' => 'partida'])
     ->names('api.partidas');
-
 
 // Rotas Thiago (API)
 Route::apiResource('gols', Api\GolController::class)

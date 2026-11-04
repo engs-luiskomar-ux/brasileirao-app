@@ -6,9 +6,9 @@ use App\Jogador;
 use App\Models\Clube;
 use App\Models\Partida;
 use App\Models\Temporada;
-use Tests\Support\BancoDoLuisTestCase;
+use Tests\Support\BancoTestCase;
 
-class ClubeApiTest extends BancoDoLuisTestCase
+class ClubeApiTest extends BancoTestCase
 {
     public function test_cadastro_retorna_201_e_resource_com_dados_normalizados(): void
     {

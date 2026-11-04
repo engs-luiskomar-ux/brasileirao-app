@@ -19,7 +19,7 @@ class EstatisticaService
         return collect(DB::select('SELECT * FROM fn_artilharia(?, ?)', [$ano, $limite]));
     }
 
-    // ranking de cartões com o Query Builder 
+    // ranking de cartões com o Query Builder
     public function rankingCartoes(?int $ano = null, int $limite = 20): Collection
     {
         return DB::table('cartao as c')
@@ -44,6 +44,8 @@ class EstatisticaService
     {
         $partidas = Partida::count();
         $gols = Gol::count();
+        $realizadas = Partida::query()->where('data_partida', '<=', now())->count();
+        $golsRealizados = Gol::query()->whereHas('partida', fn ($q) => $q->where('data_partida', '<=', now()))->count();
 
         return [
             'clubes' => Clube::count(),
@@ -51,7 +53,7 @@ class EstatisticaService
             'partidas' => $partidas,
             'gols' => $gols,
             'cartoes' => Cartao::count(),
-            'media_gols' => $partidas ? round($gols / $partidas, 2) : 0,
+            'media_gols' => $realizadas ? round($golsRealizados / $realizadas, 2) : 0,
         ];
     }
 }

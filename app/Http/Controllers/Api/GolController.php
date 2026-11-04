@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FiltroRequest;
 use App\Http\Requests\GolRequest;
 use App\Http\Resources\GolResource;
 use App\Models\Gol;
 use App\Models\Partida;
 use App\Services\EventoPartidaService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -18,7 +18,7 @@ class GolController extends Controller
 {
     public function __construct(private readonly EventoPartidaService $eventos) {}
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(FiltroRequest $request): AnonymousResourceCollection
     {
         return GolResource::collection($this->eventos->listarGols($request->integer('partida_id') ?: null));
     }
