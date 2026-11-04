@@ -1,0 +1,25 @@
+{
+  "data": "2026-11-04",
+  "origem": "Neon (somente leitura)",
+  "destino": "PostgreSQL 18 local temporário / brasileirao_restore",
+  "contagens_iguais": {
+    "clube": 45,
+    "temporada": 11,
+    "jogador": 2380,
+    "partida": 4179,
+    "gol": 9849,
+    "cartao": 20918,
+    "historico_transferencia": 0,
+    "rotinas": 12,
+    "triggers": 4,
+    "indices": 32
+  },
+  "classificacao_2019": {
+    "clube": "Flamengo",
+    "pontos": 90,
+    "jogos": 38
+  },
+  "recusa_schema_existente": true,
+  "backup_original_restaura_e_migra": true,
+  "migration_eventos_rollback_e_reaplicacao_local": true
+}

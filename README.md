@@ -21,6 +21,7 @@ No Linux/macOS, use `cp` no lugar de `copy`. Preencha os dados do Neon no `.env`
 
 ```bash
 php artisan db:verificar
+php artisan migrate
 php artisan serve
 ```
 
@@ -44,7 +45,7 @@ Não use `migrate:fresh`, rollback ou restauração no banco compartilhado.
 - `POST /api/partidas/{id}/cartoes`: registrar cartão.
 - `GET /api/artilharia?ano=2019`: artilheiros.
 
-As respostas da API ficam em `data`. Nas partidas, a data do jogo se chama `data_partida`.
+Os recursos CRUD da API ficam em `data`. Nas partidas, a data do jogo se chama `data_partida`.
 No cadastro de gol, `contra: true` credita o adversário e não aumenta a artilharia do jogador. Em gols antigos, `contra: null` significa que o backup não informa o tipo.
 O cartão vermelho gerado por dois amarelos é cancelado removendo um dos amarelos.
 
@@ -75,3 +76,7 @@ php artisan test
 
 Ajuste usuário, senha e porta em `.env.testing`. A configuração dos testes força host local e o banco `brasileirao_test`.
 Os testes usam as migrations oficiais dos quatro integrantes.
+
+## Entrega
+
+O relatório está em [docs/Relatorio_Projeto.pdf](docs/Relatorio_Projeto.pdf). As evidências ficam em `docs/evidencias/` e o roteiro da apresentação em [docs/APRESENTACAO.md](docs/APRESENTACAO.md).
