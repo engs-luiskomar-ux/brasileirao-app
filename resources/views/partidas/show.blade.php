@@ -30,6 +30,6 @@
         </p>
     </div>
 
-    
+
     @includeIf('eventos._sumula', ['partida' => $partida])
 @endsection
