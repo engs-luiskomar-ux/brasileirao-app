@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-// Thiago - lê o arquivo database/sql/05_thiago.sql e executa no banco.
 return new class extends Migration
 {
     public function up(): void
