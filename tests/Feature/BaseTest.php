@@ -9,7 +9,7 @@ class BaseTest extends TestCase
 {
     public function test_pagina_inicial_abre(): void
     {
-        $this->get('/')->assertOk()->assertSee('Brasileirão DB')->assertSee('em desenvolvimento');
+        $this->get('/')->assertOk()->assertSee('Brasileirão DB')->assertSee('Gols por partida');
     }
 
     public function test_verificacao_confirma_schema_e_ssl(): void
