@@ -5,8 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-// Estrutura de apoio enquanto as migrations de eventos do Thiago não estão integradas.
-// Este arquivo só é carregado pelos testes e preserva as tabelas oficiais, se existirem.
 return new class extends Migration
 {
     public function up(): void

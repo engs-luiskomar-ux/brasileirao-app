@@ -1,4 +1,3 @@
--- Thiago - página inicial com números de todos os módulos 
 @extends('layouts.app')
 
 @section('titulo', 'Início')

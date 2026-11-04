@@ -1,4 +1,3 @@
--- Thiago - artilharia, calculada pela function 
 @extends('layouts.app')
 
 @section('titulo', 'Artilharia')

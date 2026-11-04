@@ -30,6 +30,6 @@
         </p>
     </div>
 
-    {{-- Gols e cartões: parcial do módulo do Thiago (só aparece depois do commit dele) --}}
+    
     @includeIf('eventos._sumula', ['partida' => $partida])
 @endsection

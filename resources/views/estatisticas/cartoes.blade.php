@@ -1,4 +1,3 @@
--- Thiago - ranking de cartões 
 @extends('layouts.app')
 
 @section('titulo', 'Cartões')

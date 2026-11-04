@@ -1,4 +1,3 @@
--- Thiago - lista de jogadores dos dois clubes da partida 
 <option value="">Selecione…</option>
 <optgroup label="{{ $partida->mandante->nome }} (mandante)">
     @foreach ($sumula['elencoMandante'] as $jogador)

@@ -1,4 +1,3 @@
--- Thiago - súmula da partida gols e cartões
 @inject('eventos', 'App\Services\EventoPartidaService')
 @php($sumula = $eventos->sumula($partida))
 

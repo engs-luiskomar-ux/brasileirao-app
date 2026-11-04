@@ -1,4 +1,3 @@
--- Thiago - seletor de temporada 
 <form method="GET" class="filtros">
     <div class="campo">
         <label for="ano">Temporada</label>
